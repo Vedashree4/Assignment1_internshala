@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <p>Enter a city name to check the current weather:</p>
+        <input type="text" id="locationInput" placeholder="Enter location...">
+        <button id="getWeatherButton">Get Weather</button>
+        <div id="weatherResult"></div>
+    </div>
+
+    <script>
+        const apiKey = '92123476084aa0501a6194ffb0142084'; // Replace with your OpenWeatherMap API key
+        const weatherResult = document.getElementById("weatherResult");
+
+        document.getElementById("getWeatherButton").addEventListener("click", function () {
+            const location = document.getElementById("locationInput").value;
+            weatherResult.innerHTML = "Loading...";
+
+            // Make an AJAX request to the OpenWeatherMap API
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=eaaea2fdb8d561ab1341ef6fbfcf05f9`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const temperature = data.main.temp;
+                    const weatherDescription = data.weather[0].description;
+                    const cityName = data.name;
+
+                    const weatherText = `Weather in ${cityName}: ${temperature}°C, ${weatherDescription}`;
+                    weatherResult.innerHTML = weatherText;
+                })
+                .catch(error => {
+                    weatherResult.innerHTML = `Error: ${error.message}`;
+                });
+        });
+    </script>
+</body>
+</html>
